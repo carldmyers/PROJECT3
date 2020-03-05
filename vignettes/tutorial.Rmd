@@ -1,0 +1,20 @@
+---
+title: "PROJECT3 Tutorial"
+author: "Carl D Myers"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Project 3: PROJECT3 Tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(PROJECT3)
+```
