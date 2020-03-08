@@ -15,6 +15,7 @@
 #'
 #' @export
 my_knn_cv <- function(train, cl, k_nn, k_cv) {
+  set.seed(302)
   n <- length(cl)
   fold <- sample(rep(1:k_cv, length = n))
   cross_val <- rep(NA, k_cv)

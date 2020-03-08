@@ -15,6 +15,7 @@
 #'
 #' @export
 my_lm <- function(formula, data) {
+  set.seed(302)
   #extract model matrix
   X <- model.matrix(formula, data)
   #extract model response
