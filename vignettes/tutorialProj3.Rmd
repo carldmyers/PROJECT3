@@ -1,0 +1,27 @@
+---
+title: 'Project 3: Tutorial'
+author: "Carl Myers"
+output: rmarkdown::html_vignette
+vienette: >
+  %\VignetteIndexEntry{Tutorial}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(PROJECT3)
+```
+
+The PROJECT3 package is a final project for STAT 302. It can be used for a variety of uses including linear modeling, k-nearest-neighbors, t-tests, and Random Forest Cross Validation. To install the package from github, run the following code.
+
+```{r}
+devtools::install_github("carldmyers/PROJECT3")
+library(PROJECT3)
+```
