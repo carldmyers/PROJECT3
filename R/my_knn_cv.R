@@ -14,8 +14,6 @@
 #' my_knn_cv(train = iris[, -5], cl = iris$Species, 5, 5)
 #'
 #' @export
-library(class)
-library(tidyverse)
 my_knn_cv <- function(train, cl, k_nn, k_cv) {
   n <- length(cl)
   fold <- sample(rep(1:k_cv, length = n))
@@ -31,10 +29,7 @@ my_knn_cv <- function(train, cl, k_nn, k_cv) {
                       test = data_test, k = k_nn) #Yi star hat
     cross_val[i] <- sum(knn_output == cl_test) / length(cl_test)
   }
-  #------------------------------
   yhat_star <- knn(train = train, cl = cl,
                    test = train, k = k_nn)
-
-  # -----------------------------
   output <- list("class" = yhat_star, "cv_error" = mean(cross_val))
 }
