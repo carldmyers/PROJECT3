@@ -17,5 +17,5 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
-    magrittR
+    magrittr
 VignetteBuilder: knitr
