@@ -32,8 +32,8 @@ my_rf_cv <- function(k) {
   mse <- rep(NA, k)
   # loop thru the folds
   for (i in 1:k) {
-    data_train <- gapminder[fold != i, ] # Xi
-    data_test <-  gapminder[fold == i, ]  # Xi star
+    data_train <- my_gapminder[fold != i, ] # Xi
+    data_test <-  my_gapminder[fold == i, ]  # Xi star
     # Train our models
     cl_train <- my_gapminder$lifeExp[fold != i] # Yi
     cl_test <- my_gapminder$lifeExp[fold == i]  # Yi star
