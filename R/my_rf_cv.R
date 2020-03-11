@@ -9,20 +9,7 @@
 #' @examples
 #' my_rf_cv(5)
 #'
-#' @export
-library(class)
-library(tidyverse)
-library(randomForest)
-#' Random Forest Cross Validation Function
-#'
-#' This function will predict output using given covariates.
-#' @param k An integer that represents the number of folds.
-#' @keywords Random Forest
-#'
-#' @return A list of objects numerically with cross validation errors.
-#'
-#' @examples
-#' my_rf_cv(5)
+#' @import class randomForest magrittr
 #'
 #' @export
 my_rf_cv <- function(k) {
