@@ -11,7 +11,7 @@
 #' data(gapminder)
 #' gapminderLm <- lm(lifeExp ~ pop + gdpPercap, data = gapminder)
 #' summary(gapminderLm)
-#' my_lm(realLm, data = gapminder)
+#' my_lm(gapminderLm, data = gapminder)
 #'
 #' @export
 my_lm <- function(formula, data) {

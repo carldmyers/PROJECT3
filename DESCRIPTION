@@ -19,3 +19,6 @@ Suggests:
     rmarkdown,
     magrittr
 VignetteBuilder: knitr
+Imports: magrittr,
+    class,
+    randomForest

@@ -8,15 +8,11 @@ vienette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include=FALSE}
+```{r, include=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-```
-
-```{r setup}
-library(PROJECT3)
 ```
 
 The PROJECT3 package is a final project for STAT 302. It can be used for a variety of uses including linear modeling, k-nearest-neighbors, t-tests, and Random Forest Cross Validation. To install the package from github, run the following code.
@@ -25,13 +21,16 @@ The PROJECT3 package is a final project for STAT 302. It can be used for a varie
 ```{r, eval=FALSE}
 setwd("..")
 devtools::install("PROJECT3")
-library(YOUR_PACKAGE_NAME)
-?my_pow
-
-devtools::install_github("carldmyers/PROJECT3")
 library(PROJECT3)
 ?my_pow
 
+devtools::install_github("carldmyers/PROJECT3", built_vignette = TRUE, build_opts = c())
+library(PROJECT3)
+help(package = "PROJECT 3", help_type = "html")
+utils::browseVignettes(package = "PROJECT3")
+```
+
+```{r setup}
 library(PROJECT3)
 ```
 
@@ -47,7 +46,7 @@ All the tests demonstrated below use `lifeExp` data from `my_gapminder`.
 data("my_gapminder")
 my_t_test(my_gapminder$lifeExp, alternative = "two.sided", mu = 60)
 ```
-From the test result, we can know that the p_value is greater than 0.05. So the result is not statistically significant and we do not have enough evidence to reject the null hypothesis, H_0.
+From the test result, we notice that the p_value is greater than 0.05. Thus, it is not statistically significant have no enough evidence to reject the null hypothesis.
 
 # case II: alternative = "less"
   \begin{align}
@@ -57,7 +56,7 @@ From the test result, we can know that the p_value is greater than 0.05. So the 
 ```{r}
 my_t_test(my_gapminder$lifeExp, alternative = "less", mu = 60)
 ```
-From the test result, we can know that the p_value is less than 0.05. So the result is statistically significant and we have sufficient evidence to reject the null hypothesis, H_0.
+From the test result, we notice that the p_value is less than 0.05. Thus, it is not statistically significant have no enough evidence to reject the null hypothesis.
 
 # case III: alternative = "greater"
   \begin{align}
@@ -67,7 +66,7 @@ From the test result, we can know that the p_value is less than 0.05. So the res
 ```{r}
 my_t_test(my_gapminder$lifeExp, alternative = "greater", mu = 60)
 ```
-From the test result, we can know that the p_value is greater than 0.05. So the result is not statistically significant and we do not have enough evidence to reject the null hypothesis, H_0.
+From the test result, we notice that the p_value is greater than 0.05. Thus, it is not statistically significant have no enough evidence to reject the null hypothesis.
 
 
 # Tutorial for my_lm()
@@ -77,6 +76,7 @@ my_coef <- test[1]
 my_matrix <- cbind(1, my_gapminder$gdpPercap)
 y_hat <- my_matrix %*% as.matrix(my_coef)
 plot(my_gapminder$lifeExp, y_hat)
+expect_is(my_lm(pop ~ gdpPercap, my_data = my_gapminder), "table")
 ```
 As shown, we notice that the difference of `lifeExp` between two observations is an unit in `gdpPercap`. Compared to the coeffiecients of different continents, `gdpPercap` has less influence on `lifeExp` than `continent`.
 
