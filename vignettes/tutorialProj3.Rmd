@@ -19,14 +19,9 @@ The PROJECT3 package is a final project for STAT 302. It can be used for a varie
 
 ## Install Package from Github
 ```{r, eval=FALSE}
-setwd("..")
-devtools::install("PROJECT3")
-library(PROJECT3)
-?my_pow
-
 devtools::install_github("carldmyers/PROJECT3", built_vignette = TRUE, build_opts = c())
 library(PROJECT3)
-help(package = "PROJECT 3", help_type = "html")
+help(package = "PROJECT3", help_type = "html")
 utils::browseVignettes(package = "PROJECT3")
 ```
 
