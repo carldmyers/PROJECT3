@@ -13,7 +13,7 @@
 #' my_knn_cv(train = iris[, -5], cl = iris$Species, 1, 5)
 #' my_knn_cv(train = iris[, -5], cl = iris$Species, 5, 5)
 #'
-#' @import class magrittr
+#' @import class randomForest magrittr
 #'
 #' @export
 my_knn_cv <- function(train, cl, k_nn, k_cv) {

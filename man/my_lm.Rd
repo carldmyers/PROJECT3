@@ -18,10 +18,10 @@ A fitted linear model.
 This function fits a linear model to R.
 }
 \examples{
-data(gapminder)
-gapminderLm <- lm(lifeExp ~ pop + gdpPercap, data = gapminder)
+data(my_gapminder)
+gapminderLm <- lm(pop ~ gdpPercap, data = my_gapminder)
 summary(gapminderLm)
-my_lm(gapminderLm, data = gapminder)
+my_lm(gapminderLm, data = my_gapminder)
 
 }
 \keyword{Linear}

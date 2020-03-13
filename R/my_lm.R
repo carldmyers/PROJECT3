@@ -5,42 +5,42 @@
 #' @param data An input data frame.
 #' @keywords Linear Model
 #'
+#' @import class magrittr stats
+#'
 #' @return A fitted linear model.
 #'
 #' @examples
-#' data(gapminder)
-#' gapminderLm <- lm(lifeExp ~ pop + gdpPercap, data = gapminder)
+#' data(my_gapminder)
+#' gapminderLm <- lm(pop ~ gdpPercap, data = my_gapminder)
 #' summary(gapminderLm)
-#' my_lm(gapminderLm, data = gapminder)
+#' my_lm(gapminderLm, data = my_gapminder)
 #'
 #' @export
 my_lm <- function(formula, data) {
-  set.seed(302)
-  #extract model matrix
+  # get the independent value
   X <- model.matrix(formula, data)
-  #extract model response
+  # to extract model from the data frame
   my_frame <- model.frame(formula, data)
-  #extract model frame
+  # get the dependent value
   Y <- model.response(my_frame)
-  #solve linear regression coefficints
+
   beta <- solve(t(X) %*% X) %*% t(X) %*% Y
-  #define degrees of freedom
+
+  # degree of freedom
   df <- nrow(X) - ncol(X)
-  #define sample variance
+
+  # calculating test statistics
   sigma_sq <- sum((Y - X %*% beta)^2 / df)
-  #contents of standard error
   se <- ((sigma_sq) * solve((t(X) %*% X))) %>% diag()
-  #estimate standard error for the coefficients
   stats <- sqrt(se)
-  #define test statistic
   test_stat <- ((beta - 0) / stats)
-  #define
+
+  # get the p value
   area_under <- 2 * pt(-abs(test_stat), df)
-  #result formatting
+
+  # storing the result and printing out the list
   result <- cbind(beta, stats, test_stat, area_under)
-  #change column names
   colnames(result) <- c("Estimate", "Std. Error", "t value", "Pr(>|t|)")
   result <- as.table(result)
-  #print results
   return(result)
 }

@@ -16,8 +16,7 @@ Suggests:
     testthat (>= 2.1.0),
     covr,
     knitr,
-    rmarkdown,
-    magrittr
+    rmarkdown
 VignetteBuilder: knitr
 Imports: magrittr,
     class,
