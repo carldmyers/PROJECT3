@@ -16,7 +16,17 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, message = FALSE}
+The PROJECT3 package is a final project for STAT 302. It can be used for a variety of uses including linear modeling, k-nearest-neighbors, t-tests, and Random Forest Cross Validation. To install the package from github, run the following code.z
+
+## Install Package from Github
+```{r, eval=FALSE}
+devtools::install_github("carldmyers/PROJECT3")
+library(PROJECT3)
+help(package = "PROJECT3", help_type = "html")
+utils::browseVignettes(package = "PROJECT3")
+```
+
+```{r setup, echo = FALSE}
 library(PROJECT3)
 library(ggplot2)
 library(tidyverse)
@@ -26,16 +36,6 @@ library(class)
 library(dplyr)
 library(stats)
 library(randomForest)
-```
-
-The PROJECT3 package is a final project for STAT 302. It can be used for a variety of uses including linear modeling, k-nearest-neighbors, t-tests, and Random Forest Cross Validation. To install the package from github, run the following code.z
-
-## Install Package from Github
-```{r, eval=FALSE}
-devtools::install_github("carldmyers/PROJECT3")
-library(PROJECT3)
-help(package = "PROJECT3", help_type = "html")
-utils::browseVignettes(package = "PROJECT3")
 ```
 
 # Tutorial for my_t_test()
