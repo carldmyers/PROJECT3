@@ -104,27 +104,30 @@ tu_knn <- data.frame("k_nn" = tu_knn[, 1], "training_misclassification_rate" = t
 
 
 # Tutorial for my_rf_cv()
-```{r, eval=FALSE}
-k_vec <- c(4, 10, 20)
-tutor_rf <- matrix(NA, nrow = 30, ncol = 4)
-for (i in 1 : length(k_vec)) {
-  for (k in 1 : 30) {
-    tutor_rf[k, i] <- my_rf_cv(k = k_vec[i])
+```{r}
+#create matrix to store cv error
+cv_err.mat <- matrix(NA, 90, 2)
+cv_err.mat[, 1] <- rep(c(2, 5, 10), 30)
+j = 1
+#For each value of k, run your function 30 times.
+for(i in 1:30) {
+  
+    # Iterate through k in c(2, 5, 10):
+    for(k in c(2, 5, 10)) {
+      
+    #For each of the 30 iterations, store the CV estimated MSE.
+    cv_err.mat[j, 2] <- my_rf_cv(k) %>%  round(5)
+    j = j +1
   }
 }
-```
-## boxplots
-
-```{r}
-df <- data.frame("k_value" = tutor_rf[, 1], "MSE" = tutor_rf[, 2])
-boxplot_df <- ggplot(data = df,
-       aes(x = k_value, y = MSE, group = k_value)) +
-  geom_boxplot(fill = "red") +
+cv.err <- data.frame("k" = cv_err.mat[, 1], "mse" = cv_err.mat[, 2])
+ggplot(data = cv.err, aes(x = factor(k), y = mse), fill = factor(k)) +
+  geom_boxplot(fill = "cornflowerblue") +
+  labs(title = "Boxplots of MSE by k folds", x = "Number of Folds", y = "MSE") +
   theme_bw(base_size = 20) +
-  labs(title = "estimated MSE for each k",
-       x = "k values",
-       y = "estimated MSE") + 
-  theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
-  scale_x_continuous(breaks = c(4, 10, 20)) 
-boxplot_df
+  theme(plot.title = element_text(hjust = 0.5))
+table.df <- cv.err %>% group_by(k) %>% summarise("mean" = mean(mse), "sd" = sd(mse))
+table.df %>% 
+  kable("html") %>% 
+  kable_styling()
 ```
