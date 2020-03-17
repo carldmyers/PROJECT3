@@ -16,12 +16,16 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, include = FALSE}
+```{r setup, message = FALSE}
 library(PROJECT3)
 library(ggplot2)
 library(tidyverse)
 library(magrittr)
 library(kableExtra)
+library(class)
+library(dplyr)
+library(stats)
+library(randomForest)
 ```
 
 The PROJECT3 package is a final project for STAT 302. It can be used for a variety of uses including linear modeling, k-nearest-neighbors, t-tests, and Random Forest Cross Validation. To install the package from github, run the following code.z
