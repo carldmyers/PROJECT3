@@ -1,10 +1,8 @@
 ---
-title: "PROJECT3 Tutorial"
-author: "Carl Myers"
-collaborator: "Edward Sung"
+title: "PROJECT3: PROJECT3 Tutorial"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{PROJECT3 Tutorial}
+  %\VignetteIndexEntry{PROJECT3: PROJECT3 Tutorial}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup, message = FALSE}
+```{r setup}
 library(PROJECT3)
 ```
 
