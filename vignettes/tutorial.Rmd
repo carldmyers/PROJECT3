@@ -1,8 +1,10 @@
 ---
-title: "PROJECT3: PROJECT3 Tutorial"
+title: 'Project 3: Tutorial'
+author: "Carl Myers"
+collaborator: "Edward Sung"
 output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{PROJECT3: PROJECT3 Tutorial}
+vienette: >
+  %\VignetteIndexEntry{Tutorial}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
