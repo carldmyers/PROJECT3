@@ -66,7 +66,7 @@ From the test result, we notice that the p_value is greater than 0.05. Thus, it 
 
 
 # Tutorial for my_lm()
-```{r}
+```{r, eval=FALSE}
 test <- my_lm(formula = lifeExp ~ gdpPercap + continent, data = my_gapminder)
 my_coef <- test[, 1]
 my_matrix <- model.matrix(lifeExp ~ gdpPercap + continent, data = my_gapminder)
@@ -101,27 +101,34 @@ tu_knn <- data.frame("k_nn" = tu_knn[, 1], "training_misclassification_rate" = t
 
 
 # Tutorial for my_rf_cv()
-```{r}
-k_vec <- c(4, 10, 20)
+```{r, eval=FALSE}
+library(class)
+library(tidyverse)
+library(randomForest)
+my_rf_cv <- function(k) {
+  fold <- sample(rep(1:k, length = length(my_gapminder$lifeExp)))
+  # data <- data.frame()
+  mse <- rep(NA, k)
+  # loop thru the folds
+  for (i in 1:k) {
+    data_train <- my_gapminder[fold != i, ] # Xi
+    data_test <-  my_gapminder[fold == i, ]  # Xi star
+    # Train our models
+    cl_train <- my_gapminder$lifeExp[fold != i] # Yi
+    cl_test <- my_gapminder$lifeExp[fold == i]  # Yi star
+    model <- randomForest(lifeExp ~ gdpPercap, data = data_train, ntree = 100)
+    predictions <- predict(model, data_test[, -1])
+    mse[i] <- mean((predictions - cl_test)^2)
+  }
+  output <- mean(mse)
+}
+
+# ########################
+k_vector <- c(2, 5, 10)
 tutor_rf <- matrix(NA, nrow = 30, ncol = 4)
-for (i in 1 : length(k_vec)) {
+for (i in 1 : length(k_vector)) {
   for (k in 1 : 30) {
-    tutor_rf[k, i] <- my_rf_cv(k = k_vec[i])
+    tutor_rf[k, i] <- my_rf_cv(k = k_vector[i])
   }
 }
-```
-## boxplots
-
-```{r}
-df <- data.frame("k_value" = tutor_rf[, 1], "MSE" = tutor_rf[, 2])
-boxplot_df <- ggplot(data = df,
-       aes(x = k_value, y = MSE, group = k_value)) +
-  geom_boxplot(fill = "red") +
-  theme_bw(base_size = 20) +
-  labs(title = "estimated MSE for each k",
-       x = "k values",
-       y = "estimated MSE") + 
-  theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
-  scale_x_continuous(breaks = c(4, 10, 20)) 
-boxplot_df
 ```
