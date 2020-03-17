@@ -101,26 +101,27 @@ tu_knn <- data.frame("k_nn" = tu_knn[, 1], "training_misclassification_rate" = t
 
 
 # Tutorial for my_rf_cv()
-```{r boxplots, fig.align="center", fig.height=7, fig.width=7}
-# create a data.frame 
-my_df <- data.frame("k" = cv_error[, 1], "mse" = cv_error[, 2])
-my_df %>% 
-  ggplot(aes(x = factor(k), y = mse, fill = factor(k))) +
-  geom_boxplot() +
-  labs(title = "MSE for K folds", x = "Number of Folds", y = "MSE", 
-       fill = "Number of Folds") +
-  theme_classic(base_size = 18) +
-  theme(plot.title = element_text(hjust = 0.5),
-        panel.background = element_rect(fill = "floralwhite"),
-        legend.title = element_text(hjust = 0.5, size = 15),
-        legend.margin = margin(6, 6, 6, 6))
+```{r}
+k_vec <- c(4, 10, 20)
+tutor_rf <- matrix(NA, nrow = 30, ncol = 4)
+for (i in 1 : length(k_vec)) {
+  for (k in 1 : 30) {
+    tutor_rf[k, i] <- my_rf_cv(k = k_vec[i])
+  }
+}
 ```
-We can also calculate the mean and standard deviation of MSE for each k. We will display the outcomes in a table.
-```{r table for mean and sd, out.width=10}
-mse_sum <- my_df %>% 
-  # group the data by the value of k
-  group_by(k) %>%
-  # caculate mean and sd of MSE for each k 
-  summarise(mean = mean(mse), sd = sd(mse))
-kable_styling(kable(mse_sum))
+## boxplots
+
+```{r}
+df <- data.frame("k_value" = tutor_rf[, 1], "MSE" = tutor_rf[, 2])
+boxplot_df <- ggplot(data = df,
+       aes(x = k_value, y = MSE, group = k_value)) +
+  geom_boxplot(fill = "red") +
+  theme_bw(base_size = 20) +
+  labs(title = "estimated MSE for each k",
+       x = "k values",
+       y = "estimated MSE") + 
+  theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
+  scale_x_continuous(breaks = c(4, 10, 20)) 
+boxplot_df
 ```
