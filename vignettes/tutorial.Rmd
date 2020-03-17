@@ -16,8 +16,15 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+```{r setup, message = FALSE}
 library(PROJECT3)
+library(tidyverse)
+library(stat302package)
+library(magrittr)
+library(randomForest)
+library(dplyr)
+library(ggpubr)
+```
 ```
 
 The PROJECT3 package is a final project for STAT 302. It can be used for a variety of uses including linear modeling, k-nearest-neighbors, t-tests, and Random Forest Cross Validation. To install the package from github, run the following code.z
@@ -101,33 +108,35 @@ tu_knn <- data.frame("k_nn" = tu_knn[, 1], "training_misclassification_rate" = t
 
 
 # Tutorial for my_rf_cv()
-```{r, eval=FALSE}
-library(class)
-library(tidyverse)
-library(randomForest)
-my_rf_cv <- function(k) {
-  fold <- sample(rep(1:k, length = length(my_gapminder$lifeExp)))
-  # data <- data.frame()
-  mse <- rep(NA, k)
-  # loop thru the folds
-  for (i in 1:k) {
-    data_train <- my_gapminder[fold != i, ] # Xi
-    data_test <-  my_gapminder[fold == i, ]  # Xi star
-    # Train our models
-    cl_train <- my_gapminder$lifeExp[fold != i] # Yi
-    cl_test <- my_gapminder$lifeExp[fold == i]  # Yi star
-    model <- randomForest(lifeExp ~ gdpPercap, data = data_train, ntree = 100)
-    predictions <- predict(model, data_test[, -1])
-    mse[i] <- mean((predictions - cl_test)^2)
-  }
-  output <- mean(mse)
+```{r, eval = F}
+library(reshape2)
+set.seed(400)
+#since c(2, 5, 10)
+cv_mse_2 <- rep(NA, 30)
+cv_mse_5 <- rep(NA, 30)
+cv_mse_10 <- rep(NA, 30)
+for(i in 1 : 30) {
+  cv_mse_2[i] <- my_rf_cv(2)
+  cv_mse_5[i] <- my_rf_cv(5)
+  cv_mse_10[i] <- my_rf_cv(10)
 }
-# ########################
-k_vector <- c(2, 5, 10)
-tutor_rf <- matrix(NA, nrow = 30, ncol = 4)
-for (i in 1 : length(k_vector)) {
-  for (k in 1 : 30) {
-    tutor_rf[k, i] <- my_rf_cv(k = k_vector[i])
-  }
+cv_mse <- as.data.frame(cbind(cv_mse_2, cv_mse_5, cv_mse_10))
+# The melt function takes data in wide format and 
+# stacks a set of columns into a single column of data. 
+cv_mse_m <- melt(cv_mse)
+ggplot(cv_mse_m, aes(factor(variable), value)) +
+  geom_boxplot(fill = "green") +
+  labs(x = "Folds", y = "CV Error", title = "Folds V.S. CV Error") +
+  scale_x_discrete(labels = c("Two", "Five", "Ten")) +
+  theme_bw(base_size = 15) +
+  theme(plot.title = element_text(hjust = 0.5))
+avg <- rep(NA, 3)
+std_dev <- rep(NA, 3)
+for(i in 1:length(cv_mse)) {
+  avg[i] <- mean(cv_mse[, i])
+  std_dev[i] <- sd(cv_mse[, i])
 }
+table1 <- as.data.frame(cbind(avg, std_dev))
+table1
 ```
+Once the numbers of folds increase, the cv errors increase. I think if we increase the number of folds, we can get more accurate values.
