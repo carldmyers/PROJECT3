@@ -1,15 +1,15 @@
 ---
-title: 'Project 3: Tutorial'
+title: "Project 3: PROJECT3 Tutorial"
 author: "Carl Myers"
 collaborator: "Edward Sung"
 output: rmarkdown::html_vignette
-vienette: >
-  %\VignetteIndexEntry{Tutorial}
+vignette: >
+  %\VignetteIndexEntry{Project 3: PROJECT3 Tutorial}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include=FALSE}
+```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -110,6 +110,9 @@ tu_knn <- data.frame("k_nn" = tu_knn[, 1], "training_misclassification_rate" = t
 
 # Tutorial for my_rf_cv()
 ```{r, eval=FALSE}
+library(class)
+library(tidyverse)
+library(randomForest)
 my_rf_cv <- function(k) {
   fold <- sample(rep(1:k, length = length(my_gapminder$lifeExp)))
   # data <- data.frame()
