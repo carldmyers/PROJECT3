@@ -110,9 +110,6 @@ tu_knn <- data.frame("k_nn" = tu_knn[, 1], "training_misclassification_rate" = t
 
 # Tutorial for my_rf_cv()
 ```{r, eval=FALSE}
-library(class)
-library(tidyverse)
-library(randomForest)
 my_rf_cv <- function(k) {
   fold <- sample(rep(1:k, length = length(my_gapminder$lifeExp)))
   # data <- data.frame()
@@ -133,10 +130,8 @@ my_rf_cv <- function(k) {
 # ########################
 k_vector <- c(2, 5, 10)
 tutor_rf <- matrix(NA, nrow = 30, ncol = 4)
-for (i in 1 : length(k_vec)) {
 for (i in 1 : length(k_vector)) {
   for (k in 1 : 30) {
-    tutor_rf[k, i] <- my_rf_cv(k = k_vec[i])
     tutor_rf[k, i] <- my_rf_cv(k = k_vector[i])
   }
 }
