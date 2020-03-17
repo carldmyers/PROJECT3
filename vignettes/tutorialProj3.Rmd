@@ -101,31 +101,27 @@ tu_knn <- data.frame("k_nn" = tu_knn[, 1], "training_misclassification_rate" = t
 
 
 # Tutorial for my_rf_cv()
-```{r}
-k_vector <- c(2, 5, 10)
-tu_rf <- matrix(NA, nrow = 90, ncol = 2)
-for (i in 1 : length(k_vector)) {
-  for (j in 1 : 30) {
-    tu_rf[(i - 1) * 30 + j, 1] <- k_vector[i]
-    tu_rf[(i - 1) * 30 + j, 2] <- my_rf_cv(k_vector[i])
+```{r, eval=FALSE}
+k_vec <- c(4, 10, 20)
+tutor_rf <- matrix(NA, nrow = 30, ncol = 4)
+for (i in 1 : length(k_vec)) {
+  for (k in 1 : 30) {
+    tutor_rf[k, i] <- my_rf_cv(k = k_vec[i])
   }
 }
 ```
-
+## boxplots
 
 ```{r}
-tu <- data.frame("K_value" = tu_rf[, 1], "MSE" = tu_rf[, 2])
-tu_graph <- ggplot(data = tu,
-       aes(x = K_value, y = MSE, group = K_value)) +
-  geom_boxplot(fill = "lightblue") +
-  theme_bw(base_size = 16) +
-  labs(title = "CV estimated MSE for different k-values",
-       x = "k-values",
-       y = "Estimated MSE") + 
+df <- data.frame("k_value" = tutor_rf[, 1], "MSE" = tutor_rf[, 2])
+boxplot_df <- ggplot(data = df,
+       aes(x = k_value, y = MSE, group = k_value)) +
+  geom_boxplot(fill = "red") +
+  theme_bw(base_size = 20) +
+  labs(title = "estimated MSE for each k",
+       x = "k values",
+       y = "estimated MSE") + 
   theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
-  scale_x_continuous(breaks = c(2, 5, 10)) 
-rf_vector <- c(mean(tu_rf[1 : 30, 2]), mean(tu_rf[31 : 60, 2]), mean(tu_rf[61 : 90, 2]), sd(tu_rf[1 : 30, 2]), sd(tu_rf[31 : 60, 2]), sd(tu_rf[61 : 90, 2]))
-rf_matrix <- matrix(rf_vector, nrow = 3, ncol = 2)
-# Use a table to display the average CV estimate and the standard deviation of the CV estimates across k
-rf_table <- data.frame("k_values" = c(2, 5, 10),"mean" = rf_matrix[, 1], "sd" = rf_matrix[, 2])
+  scale_x_continuous(breaks = c(4, 10, 20)) 
+boxplot_df
 ```
