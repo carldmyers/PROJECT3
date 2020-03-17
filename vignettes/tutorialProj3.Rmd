@@ -1,6 +1,7 @@
 ---
 title: 'Project 3: Tutorial'
 author: "Carl Myers"
+collaborator: "Edward Sung"
 output: rmarkdown::html_vignette
 vienette: >
   %\VignetteIndexEntry{Tutorial}
@@ -17,9 +18,12 @@ knitr::opts_chunk$set(
 
 ```{r setup, include = FALSE}
 library(PROJECT3)
+library(ggplot2)
+library(magrittr)
+library(tidyverse)
 ```
 
-The PROJECT3 package is a final project for STAT 302. It can be used for a variety of uses including linear modeling, k-nearest-neighbors, t-tests, and Random Forest Cross Validation. To install the package from github, run the following code.
+The PROJECT3 package is a final project in collaboration with Edward Sung for STAT 302. It can be used for a variety of uses including linear modeling, k-nearest-neighbors, t-tests, and Random Forest Cross Validation. To install the package from github, run the following code. 
 
 ## Install Package from Github
 ```{r, eval=FALSE}
@@ -63,10 +67,17 @@ my_t_test(my_gapminder$lifeExp, alternative = "greater", mu = 60)
 ```
 From the test result, we notice that the p_value is greater than 0.05. Thus, it is not statistically significant have no enough evidence to reject the null hypothesis.
 
-
-# Tutorial for my_lm()
-```{r, eval=FALSE}
-test <- my_lm(formula = lifeExp ~ gdpPercap + continent, data = my_gapminder)
+##3. Tutorial for `my_lm`
+```{r, eval = FALSE}
+test <- my_lm(lifeExp ~ gdpPercap + continent, my_gapminder)
+estimate <- test[2, 1]
+p_val <- test[2, 4]
+test
+```
+ 
+As shown, we notice that the difference of `lifeExp` between two observations is an unit in `gdpPercap`. Compared to the coeffiecients of different continents, `gdpPercap` has less influence on `lifeExp` than `continent`.
+  
+```{r, eval = FALSE}
 my_coef <- test[, 1]
 my_matrix <- model.matrix(lifeExp ~ gdpPercap + continent, data = my_gapminder)
 y_hat <- my_matrix %*% as.matrix(my_coef)
@@ -78,44 +89,55 @@ my_df <- data.frame("actual" = my_gapminder$lifeExp, "fitted" = y_hat, "continen
    labs(x = "Fitted values", y = "Actual values", title = "Actual vs. Fitted") + 
    theme(plot.title = element_text(hjust = 0.5))
 ```
-As shown, we notice that the difference of `lifeExp` between two observations is an unit in `gdpPercap`. Compared to the coeffiecients of different continents, `gdpPercap` has less influence on `lifeExp` than `continent`.
 
-# Tutorial for my_knn_cv()
-```{r, eval=FALSE}
-tutor_knn <- my_knn_cv(train = my_gapminder[, 3 : 4], 
-                       cl = my_gapminder$continent, k_nn = 10, k_cv = 5)
+##4. Tutorial for `my_knn_cv` 
+
+```{r, eval = FALSE}
+# For each value of k_nn, record the training misclassification rate and the CV misclassification rate
+knn_vector <- c(1 : 10)
+tu_knn <- matrix(NA, nrow = 10, ncol = 3)
+for (i in 1 : 10) {
+  tu_knn[i, 1] <- knn_vector[i]
+  # get the cv misclassification rate
+  tu_knn[i, 3] <- my_knn_cv(train = my_gapminder[, 3 : 4], 
+          cl = my_gapminder$continent, k_nn = knn_vector[i], k_cv = 5)$cv_err
+  prediction <- my_knn_cv(train = my_gapminder[, 3 : 4], 
+          cl = my_gapminder$continent, k_nn = knn_vector[i], k_cv = 5)$class
+  # get tge training misclassification rate
+  tu_knn[i, 2] <- sum(prediction != my_gapminder$continent) / length(my_gapminder$continent)
+}
+tu_knn <- data.frame("k_nn" = tu_knn[, 1], "training_misclassification_rate" = tu_knn[, 2], 
+                     "CV_misclassification_rate" = tu_knn[, 3])
+```
+
+##5. Tutorial for `my_rf_cv`
+
+Predict lifeExp using covariate gdpPercap.
+```{r, eval = FALSE}
+k_vector <- c(2, 5, 10)
+tu_rf <- matrix(NA, nrow = 90, ncol = 2)
+for (i in 1 : length(k_vector)) {
+  for (j in 1 : 30) {
+    tu_rf[(i - 1) * 30 + j, 1] <- k_vector[i]
+    tu_rf[(i - 1) * 30 + j, 2] <- my_rf_cv(k_vector[i])
+  }
+}
 ```
 
 
-# Tutorial for my_rf_cv()
-```{r, eval=FALSE}
-library(class)
-library(tidyverse)
-library(randomForest)
-my_rf_cv <- function(k) {
-  fold <- sample(rep(1:k, length = length(my_gapminder$lifeExp)))
-  # data <- data.frame()
-  mse <- rep(NA, k)
-  # loop thru the folds
-  for (i in 1:k) {
-    data_train <- my_gapminder[fold != i, ] # Xi
-    data_test <-  my_gapminder[fold == i, ]  # Xi star
-    # Train our models
-    cl_train <- my_gapminder$lifeExp[fold != i] # Yi
-    cl_test <- my_gapminder$lifeExp[fold == i]  # Yi star
-    model <- randomForest(lifeExp ~ gdpPercap, data = data_train, ntree = 100)
-    predictions <- predict(model, data_test[, -1])
-    mse[i] <- mean((predictions - cl_test)^2)
-  }
-  output <- mean(mse)
-}
-
-# ########################
-k_vector <- c(2, 5, 10)
-tutor_rf <- matrix(NA, nrow = 30, ncol = 4)
-for (i in 1 : length(k_vector)) {
-  for (k in 1 : 30) {
-    tutor_rf[k, i] <- my_rf_cv(k = k_vector[i])
-  }
-}
+```{r, eval = FALSE}
+tu <- data.frame("K_value" = tu_rf[, 1], "MSE" = tu_rf[, 2])
+tu_graph <- ggplot(data = tu,
+       aes(x = K_value, y = MSE, group = K_value)) +
+  geom_boxplot(fill = "lightblue") +
+  theme_bw(base_size = 16) +
+  labs(title = "CV estimated MSE for different k-values",
+       x = "k-values",
+       y = "Estimated MSE") + 
+  theme(plot.title = element_text(hjust = 0.5, face = "bold")) +
+  scale_x_continuous(breaks = c(2, 5, 10)) 
+rf_vector <- c(mean(tu_rf[1 : 30, 2]), mean(tu_rf[31 : 60, 2]), mean(tu_rf[61 : 90, 2]), sd(tu_rf[1 : 30, 2]), sd(tu_rf[31 : 60, 2]), sd(tu_rf[61 : 90, 2]))
+rf_matrix <- matrix(rf_vector, nrow = 3, ncol = 2)
+# Use a table to display the average CV estimate and the standard deviation of the CV estimates across k
+rf_table <- data.frame("k_values" = c(2, 5, 10),"mean" = rf_matrix[, 1], "sd" = rf_matrix[, 2])
 ```
