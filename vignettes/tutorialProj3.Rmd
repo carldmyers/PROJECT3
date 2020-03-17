@@ -1,6 +1,7 @@
 ---
 title: 'Project 3: Tutorial'
 author: "Carl Myers"
+collaborator: "Edward Sung"
 output: rmarkdown::html_vignette
 vienette: >
   %\VignetteIndexEntry{Tutorial}
