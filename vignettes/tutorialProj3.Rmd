@@ -82,9 +82,21 @@ my_df <- data.frame("actual" = my_gapminder$lifeExp, "fitted" = y_hat, "continen
 As shown, we notice that the difference of `lifeExp` between two observations is an unit in `gdpPercap`. Compared to the coeffiecients of different continents, `gdpPercap` has less influence on `lifeExp` than `continent`.
 
 # Tutorial for my_knn_cv()
-```{r, eval=FALSE}
-tutor_knn <- my_knn_cv(train = my_gapminder[, 3 : 4], 
-                       cl = my_gapminder$continent, k_nn = 10, k_cv = 5)
+```{r}
+knn_vector <- c(1 : 10)
+tu_knn <- matrix(NA, nrow = 10, ncol = 3)
+for (i in 1 : 10) {
+  tu_knn[i, 1] <- knn_vector[i]
+  # get the cv misclassification rate
+  tu_knn[i, 3] <- my_knn_cv(train = my_gapminder[, 3 : 4], 
+          cl = my_gapminder$continent, k_nn = knn_vector[i], k_cv = 5)$cv_err
+  prediction <- my_knn_cv(train = my_gapminder[, 3 : 4], 
+          cl = my_gapminder$continent, k_nn = knn_vector[i], k_cv = 5)$class
+  # get tge training misclassification rate
+  tu_knn[i, 2] <- sum(prediction != my_gapminder$continent) / length(my_gapminder$continent)
+}
+tu_knn <- data.frame("k_nn" = tu_knn[, 1], "training_misclassification_rate" = tu_knn[, 2], 
+                     "CV_misclassification_rate" = tu_knn[, 3])
 ```
 
 
